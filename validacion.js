@@ -1,31 +1,31 @@
 let formulario = document.getElementById("miFormulario");
 let usuario = document.getElementById("usuario");
-let mensaje = document.getElementById("mensajeUsuario");
+let msg = document.getElementById("validarcorrecto");
 
-usuario.addEventListener("input", function () {
+usuario.addEventListener("input", function() {
 
-    // Permitir letras, números, guiones y puntos
+    // Permitir letras, números, guiones (-) y puntos (.)
     this.value = this.value.replace(/[^a-zA-Z0-9.-]/g, "");
 
+    this.style.border = "2px solid";
+
     if (this.value.length < 3) {
-        this.classList.remove("is-valid");
-        this.classList.add("is-invalid");
-        mensaje.textContent = "Mínimo 3 caracteres";
-        mensaje.className = "form-text text-danger";
+        this.style.borderColor = "red";
+        msg.textContent = "Mínimo 3 caracteres. Solo letras, números, - y .";
+        msg.style.color = "red";
     } else {
-        this.classList.remove("is-invalid");
-        this.classList.add("is-valid");
-        mensaje.textContent = "Usuario válido";
-        mensaje.className = "form-text text-success";
+        this.style.borderColor = "green";
+        msg.textContent = "Usuario válido";
+        msg.style.color = "green";
     }
 });
 
-// Prevenir envío si no es válido
-formulario.addEventListener("submit", function (e) {
+// Prevenir envío del formulario
+formulario.addEventListener("submit", function(e) {
     e.preventDefault();
 
     if (usuario.value.length < 3) {
-        alert("Corrige el usuario antes de enviar");
+        alert("El usuario no cumple los requisitos");
     } else {
         alert("Formulario enviado correctamente");
     }
