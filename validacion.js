@@ -11,7 +11,6 @@ let mensajeGeneral = document.getElementById("mensajeGeneral");
 let intentos = 0;
 let bloqueado = false;
 
-
 // VALIDACIÓN USUARIO (PUNTO 1)
 usuario.addEventListener("input", function () {
 
@@ -28,7 +27,6 @@ usuario.addEventListener("input", function () {
     }
 });
 
-
 // MOSTRAR / OCULTAR CONTRASEÑA (PUNTO 2)
 togglePassword.addEventListener("click", function () {
 
@@ -42,12 +40,10 @@ togglePassword.addEventListener("click", function () {
 
 });
 
-
 // CONTADOR DE CARACTERES (PUNTO 3)
 password.addEventListener("input", function () {
     contadorPassword.textContent = "Caracteres: " + password.value.length;
 });
-
 
 // VALIDACIÓN FORTALEZA (PUNTO 4)
 password.addEventListener("input", function () {
@@ -73,7 +69,6 @@ password.addEventListener("input", function () {
     }
 
 });
-
 
 // PUNTO 5 Y 6 - VALIDACIÓN FINAL + BLOQUEO
 formulario.addEventListener("submit", function (e) {
