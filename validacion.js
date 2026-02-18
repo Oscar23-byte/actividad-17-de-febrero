@@ -4,12 +4,16 @@ let mensajeUsuario = document.getElementById("mensajeUsuario");
 
 let password = document.getElementById("password");
 let togglePassword = document.getElementById("togglePassword");
+let contadorPassword = document.getElementById("contadorPassword");
+let mensajePassword = document.getElementById("mensajePassword");
 
 
+// =============================
 // VALIDACIÓN USUARIO (PUNTO 1)
-
+// =============================
 usuario.addEventListener("input", function () {
 
+    // Permitir letras, números, guiones y puntos
     this.value = this.value.replace(/[^a-zA-Z0-9.-]/g, "");
 
     if (this.value.length < 3) {
@@ -24,7 +28,9 @@ usuario.addEventListener("input", function () {
 });
 
 
+// =============================
 // PREVENIR ENVÍO
+// =============================
 formulario.addEventListener("submit", function (e) {
     e.preventDefault();
 
@@ -38,8 +44,9 @@ formulario.addEventListener("submit", function (e) {
 });
 
 
+// =============================
 // MOSTRAR / OCULTAR CONTRASEÑA (PUNTO 2)
-
+// =============================
 togglePassword.addEventListener("click", function () {
 
     if (password.type === "password") {
@@ -48,6 +55,42 @@ togglePassword.addEventListener("click", function () {
     } else {
         password.type = "password";
         togglePassword.textContent = "Mostrar";
+    }
+
+});
+
+
+// =============================
+// CONTADOR DE CARACTERES (PUNTO 3)
+// =============================
+password.addEventListener("input", function () {
+    contadorPassword.textContent = "Caracteres: " + password.value.length;
+});
+
+
+// =============================
+// VALIDACIÓN FORTALEZA (PUNTO 4)
+// =============================
+password.addEventListener("input", function () {
+
+    let valor = password.value;
+
+    let tieneNumero = /[0-9]/.test(valor);
+    let tieneMayuscula = /[A-Z]/.test(valor);
+    let tieneEspecial = /[!@#$%^&*(),.?":{}|<>]/.test(valor);
+    let longitudValida = valor.length >= 8;
+
+    if (!longitudValida) {
+        mensajePassword.textContent = "Debe tener mínimo 8 caracteres";
+        mensajePassword.style.color = "red";
+    }
+    else if (!tieneNumero || !tieneMayuscula || !tieneEspecial) {
+        mensajePassword.textContent = "Debe incluir mayúscula, número y carácter especial";
+        mensajePassword.style.color = "orange";
+    }
+    else {
+        mensajePassword.textContent = "Contraseña segura";
+        mensajePassword.style.color = "green";
     }
 
 });
