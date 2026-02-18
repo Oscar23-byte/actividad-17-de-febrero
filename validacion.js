@@ -12,9 +12,7 @@ let intentos = 0;
 let bloqueado = false;
 
 
-// =============================
 // VALIDACIÓN USUARIO (PUNTO 1)
-// =============================
 usuario.addEventListener("input", function () {
 
     this.value = this.value.replace(/[^a-zA-Z0-9.-]/g, "");
@@ -31,9 +29,7 @@ usuario.addEventListener("input", function () {
 });
 
 
-// =============================
 // MOSTRAR / OCULTAR CONTRASEÑA (PUNTO 2)
-// =============================
 togglePassword.addEventListener("click", function () {
 
     if (password.type === "password") {
@@ -47,17 +43,13 @@ togglePassword.addEventListener("click", function () {
 });
 
 
-// =============================
 // CONTADOR DE CARACTERES (PUNTO 3)
-// =============================
 password.addEventListener("input", function () {
     contadorPassword.textContent = "Caracteres: " + password.value.length;
 });
 
 
-// =============================
 // VALIDACIÓN FORTALEZA (PUNTO 4)
-// =============================
 password.addEventListener("input", function () {
 
     let valor = password.value;
@@ -83,9 +75,7 @@ password.addEventListener("input", function () {
 });
 
 
-// =============================
-// PUNTO 5 - BLOQUEO DESPUÉS DE 3 INTENTOS
-// =============================
+// PUNTO 5 Y 6 - VALIDACIÓN FINAL + BLOQUEO
 formulario.addEventListener("submit", function (e) {
     e.preventDefault();
 
@@ -93,11 +83,21 @@ formulario.addEventListener("submit", function (e) {
         return;
     }
 
-    let usuarioValido = usuario.value.length >= 3;
+    // VALIDACIÓN ADICIONAL DE USUARIO (PUNTO 6)
+    let usuarioRegex = /^[a-zA-Z0-9.-]{3,}$/;
+    let usuarioValido = usuarioRegex.test(usuario.value);
+
+    if (!usuarioValido) {
+        mensajeUsuario.textContent = "Usuario inválido al enviar";
+        mensajeUsuario.style.color = "red";
+        usuario.style.border = "2px solid red";
+    }
+
+    // VALIDACIÓN FINAL DE CONTRASEÑA
     let passwordValida = password.value.length >= 8 &&
-                         /[0-9]/.test(password.value) &&
-                         /[A-Z]/.test(password.value) &&
-                         /[!@#$%^&*(),.?":{}|<>]/.test(password.value);
+                        /[0-9]/.test(password.value) &&
+                        /[A-Z]/.test(password.value) &&
+                        /[!@#$%^&*(),.?":{}|<>]/.test(password.value);
 
     if (usuarioValido && passwordValida) {
 
@@ -108,6 +108,9 @@ formulario.addEventListener("submit", function (e) {
         contadorPassword.textContent = "Caracteres: 0";
         mensajePassword.textContent = "";
         mensajeUsuario.textContent = "";
+
+        usuario.style.border = "";
+        password.style.border = "";
 
         intentos = 0;
 
