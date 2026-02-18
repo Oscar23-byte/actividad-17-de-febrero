@@ -6,6 +6,10 @@ let password = document.getElementById("password");
 let togglePassword = document.getElementById("togglePassword");
 let contadorPassword = document.getElementById("contadorPassword");
 let mensajePassword = document.getElementById("mensajePassword");
+let mensajeGeneral = document.getElementById("mensajeGeneral");
+
+let intentos = 0;
+let bloqueado = false;
 
 
 // =============================
@@ -13,7 +17,6 @@ let mensajePassword = document.getElementById("mensajePassword");
 // =============================
 usuario.addEventListener("input", function () {
 
-    // Permitir letras, números, guiones y puntos
     this.value = this.value.replace(/[^a-zA-Z0-9.-]/g, "");
 
     if (this.value.length < 3) {
@@ -23,22 +26,6 @@ usuario.addEventListener("input", function () {
     } else {
         this.style.border = "2px solid green";
         mensajeUsuario.textContent = "Usuario válido";
-        mensajeUsuario.style.color = "green";
-    }
-});
-
-
-// =============================
-// PREVENIR ENVÍO
-// =============================
-formulario.addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    if (usuario.value.length < 3) {
-        mensajeUsuario.textContent = "Corrige el usuario antes de enviar";
-        mensajeUsuario.style.color = "red";
-    } else {
-        mensajeUsuario.textContent = "Formulario listo para enviar";
         mensajeUsuario.style.color = "green";
     }
 });
@@ -93,4 +80,68 @@ password.addEventListener("input", function () {
         mensajePassword.style.color = "green";
     }
 
+});
+
+
+// =============================
+// PUNTO 5 - BLOQUEO DESPUÉS DE 3 INTENTOS
+// =============================
+formulario.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    if (bloqueado) {
+        return;
+    }
+
+    let usuarioValido = usuario.value.length >= 3;
+    let passwordValida = password.value.length >= 8 &&
+                         /[0-9]/.test(password.value) &&
+                         /[A-Z]/.test(password.value) &&
+                         /[!@#$%^&*(),.?":{}|<>]/.test(password.value);
+
+    if (usuarioValido && passwordValida) {
+
+        mensajeGeneral.textContent = "Formulario enviado correctamente";
+        mensajeGeneral.className = "mt-3 text-success";
+
+        formulario.reset();
+        contadorPassword.textContent = "Caracteres: 0";
+        mensajePassword.textContent = "";
+        mensajeUsuario.textContent = "";
+
+        intentos = 0;
+
+    } else {
+
+        intentos++;
+
+        mensajeGeneral.textContent = "Datos incorrectos. Intento " + intentos + " de 3";
+        mensajeGeneral.className = "mt-3 text-danger";
+
+        if (intentos >= 3) {
+
+            bloqueado = true;
+
+            mensajeGeneral.textContent = "Formulario bloqueado por 30 segundos";
+            mensajeGeneral.className = "mt-3 text-danger";
+
+            usuario.disabled = true;
+            password.disabled = true;
+            togglePassword.disabled = true;
+
+            setTimeout(function () {
+
+                bloqueado = false;
+                intentos = 0;
+
+                usuario.disabled = false;
+                password.disabled = false;
+                togglePassword.disabled = false;
+
+                mensajeGeneral.textContent = "Formulario desbloqueado";
+                mensajeGeneral.className = "mt-3 text-success";
+
+            }, 30000);
+        }
+    }
 });
